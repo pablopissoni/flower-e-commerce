@@ -1,5 +1,7 @@
 "use client";
 
+import { useUiStore } from "@/store";
+import clsx from "clsx";
 import Link from "next/link";
 import {
   IoCloseOutline,
@@ -13,21 +15,35 @@ import {
 } from "react-icons/io5";
 
 export const Sidebar = () => {
+  const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
+  const closeSideMenu = useUiStore((state) => state.closeSideMenu);
+
   return (
     <div>
       {/* Background  black*/}
-      <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" />
+      {isSideMenuOpen && <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" />}
 
       {/* Blur effect */}
-      <div className="fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-filter backdrop-blur-sm" />
+      {isSideMenuOpen && (
+        <div
+          className="fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-filter backdrop-blur-sm"
+          onClick={closeSideMenu}
+        />
+      )}
 
       {/* Sidemenu */}
-      <nav className="fixed p-5 right-0 top-0 w-[500px] h-screen z-20 bg-white shadow-2xl transform transition-all duration-300">
-        <IoCloseOutline
-          size={50}
-          className="absolute top-5 right-5 cursor-pointer"
-          onClick={() => console.log("Click Close")}
-        />
+      <nav
+        className={clsx(
+          "fixed p-5 right-0 top-0 w-[500px] h-screen z-20 bg-white shadow-2xl transform transition-all duration-300",
+          {
+            //* Clase condicional para mostrar u ocultar el menu con animacion
+            // "translate-x-0": isSideMenuOpen,
+            "translate-x-full": !isSideMenuOpen,
+          }
+        )}
+      >
+        {/* Close button */}
+        <IoCloseOutline size={50} className="absolute top-5 right-5 cursor-pointer" onClick={() => closeSideMenu()} />
 
         {/* Input search */}
         <div className="relative mt-14">
@@ -60,6 +76,7 @@ export const Sidebar = () => {
         {/* Line separator */}
         <div className="w-full h-[1px] bg-gray-200 my-10" />
 
+        {/* Menu items */}
         <Link href={"/"} className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
           <IoShirtOutline size={30} />
           <span className="ml-3 text-xl">Productos</span>
