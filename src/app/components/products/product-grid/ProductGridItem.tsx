@@ -1,21 +1,28 @@
+"use client";
+
 import { Product } from "@/app/interfaces";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 interface Props {
   product: Product;
 }
 
 export const ProductGridItem = ({ product }: Props) => {
+  const [displayImages, setDisplayImages] = useState(product.images[0]);
+
   return (
     <div className="rounded-md overflow-hidden fade-in">
       <Link href={`/product/${product.slug}`}>
         <Image
-          src={`/products/${product.images[0]}`}
-          className="w-full object-cover"
+          src={`/products/${displayImages}`}
+          className="w-full object-cover rounded"
           width={500}
           height={500}
           alt={product.title}
+          onMouseEnter={() => setDisplayImages(product.images[1])}
+          onMouseLeave={() => setDisplayImages(product.images[0])}
         />
       </Link>
       {/* Titulo */}
