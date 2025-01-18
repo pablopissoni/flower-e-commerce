@@ -7,7 +7,6 @@ import { IoCartOutline, IoMenuOutline, IoSearchOutline } from "react-icons/io5";
 
 //* Navigation bar
 export const TopMenu = () => {
-  const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const openSideMenu = useUiStore((state) => state.openSideMenu);
 
   return (
@@ -28,7 +27,7 @@ export const TopMenu = () => {
         <Link href="/category/women" className="m-2 p-2 rounded-sm transition-all hover:bg-slate-100">
           <span>Mujeres</span>
         </Link>
-        <Link href="/category/kids" className="m-2 p-2 rounded-sm transition-all hover:bg-slate-100">
+        <Link href="/category/kid" className="m-2 p-2 rounded-sm transition-all hover:bg-slate-100">
           <span>Niños</span>
         </Link>
       </div>
