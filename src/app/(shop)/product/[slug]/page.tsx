@@ -1,3 +1,4 @@
+import { QuantitySelector, SizeSelector } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { initialData } from "@/seed/seed";
 import { notFound } from "next/navigation";
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export default function Product({ params }: Props) {
+  // Todo params deberia ser asincrono
   const { slug } = params;
   const product = initialData.products.find((prod) => prod.slug === slug);
 
@@ -26,9 +28,9 @@ export default function Product({ params }: Props) {
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>{product.title}</h1>
         <p className="text-lg mb-5">${product.price}</p>
         {/* Selector de tallas */}
-
+        <SizeSelector selectedSize={product.sizes[0]} avaliableSizes={product.sizes} />
         {/* Selector de cantidad */}
-
+        <QuantitySelector />
         {/* Boton de agregar al carrito */}
         <button className="btn-primary my-5">Agregar al carrito</button>
 
