@@ -44,7 +44,7 @@ export default function Cart() {
             ))}
           </div>
           {/* Checkout - Resumen de pedido*/}
-          <div className="bg-white rounded-xl shadow-xl p-7">
+          <div className="bg-white rounded-xl shadow-xl p-7 h-[300px]">
             <h2 className="text-2xl mb-2">Resumen de orden</h2>
 
             <div className="grid grid-cols-2">
@@ -52,7 +52,7 @@ export default function Cart() {
               <span className="text-right">3 articulos</span>
 
               <span>Subtotal</span>
-              <span className="text=right">$30</span>
+              <span className="text-right">$30</span>
 
               <span>Impuesto</span>
               <span className="text-right">$2</span>
