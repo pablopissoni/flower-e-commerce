@@ -44,7 +44,7 @@ export default function Cart() {
             ))}
           </div>
           {/* Checkout - Resumen de pedido*/}
-          <div className="bg-white rounded-xl shadow-xl p-7 h-[300px]">
+          <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
             <h2 className="text-2xl mb-2">Resumen de orden</h2>
 
             <div className="grid grid-cols-2">
