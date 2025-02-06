@@ -1,18 +1,25 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Gender } from "@prisma/client";
 
 interface PaginationOptions {
   page?: number;
   take?: number;
-  category?: string;
+  gender?: Gender;
 }
 
-export const getPaginatedProductsWithImages = async ({ page = 1, take = 12 }: PaginationOptions) => {
+export const getPaginatedProductsWithImages = async ({ page = 1, take = 12, gender }: PaginationOptions) => {
   if (isNaN(Number(page))) page = 1;
   if (page < 1) page = 1;
 
   if (isNaN(Number(take))) take = 12;
+
+  // Valido que el género sea válido
+  const validGenders = ["men", "women", "kid", "unisex"];
+  if (gender && !validGenders.includes(gender)) {
+    throw new Error("Género no válido. Debe ser 'men', 'women', 'kid' o 'unisex'.");
+  }
 
   try {
     const [products, countProduct] = await Promise.all([
@@ -20,6 +27,7 @@ export const getPaginatedProductsWithImages = async ({ page = 1, take = 12 }: Pa
       await prisma.product.findMany({
         take: take,
         skip: (page - 1) * take,
+        where: { gender: gender },
         include: {
           ProductImage: {
             take: 2,
@@ -31,7 +39,7 @@ export const getPaginatedProductsWithImages = async ({ page = 1, take = 12 }: Pa
       }),
 
       await prisma.product.count({
-        // where: { gender: "kid" },
+        where: { gender: gender },
       }),
     ]);
 
