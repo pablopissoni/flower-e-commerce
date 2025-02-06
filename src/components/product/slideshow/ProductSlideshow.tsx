@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import type { Swiper as SwiperType } from "swiper";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
@@ -12,21 +13,27 @@ import "./slideshow.css";
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
+interface MyCSSProperties extends React.CSSProperties {
+  "--swiper-navigation-color"?: string;
+  "--swiper-pagination-color"?: string;
+}
 interface Props {
   images: string[];
   title: string;
-  className?: string;
+  // className?: string;
 }
 
-export const ProductSlideshow = ({ images, title, className }: Props) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+export const ProductSlideshow = ({ images, title }: Props) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   return (
     <>
       <Swiper
-        style={{
-          "--swiper-navigation-color": "#fff",
-          "--swiper-pagination-color": "#fff",
-        }}
+        style={
+          {
+            "--swiper-navigation-color": "#fff",
+            "--swiper-pagination-color": "#fff",
+          } as MyCSSProperties
+        }
         loop={true}
         spaceBetween={10}
         navigation={true}

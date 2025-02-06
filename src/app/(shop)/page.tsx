@@ -1,10 +1,10 @@
+export const revalidate = 60; // TODO Testear que funcione
+
 import { redirect } from "next/navigation";
 import { Pagination, ProductGrid, Title } from "../../components";
 import { getPaginatedProductsWithImages } from "@/actions";
 interface Props {
-  searchParams: {
-    page?: string;
-  };
+  searchParams: Promise<{ page?: string }>;
 }
 
 export default async function Home({ searchParams }: Props) {
@@ -12,7 +12,7 @@ export default async function Home({ searchParams }: Props) {
   const page = searchParamsData?.page ? +searchParamsData.page : 1;
 
   // Lista de productos con paginado
-  const { products, totalPages } = await getPaginatedProductsWithImages({ page });
+  const { products, totalPages } = await getPaginatedProductsWithImages({ page, take: 12 });
 
   if (products.length === 0) redirect("/");
 

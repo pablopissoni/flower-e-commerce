@@ -3,14 +3,12 @@ import { titleFont } from "@/config/fonts";
 import { initialData } from "@/seed/seed";
 import { notFound } from "next/navigation";
 interface Props {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
-export default function Product({ params }: Props) {
+export default async function Product({ params }: Props) {
   // Todo params deberia ser asincrono
-  const { slug } = params;
+  const { slug } = await params;
   const product = initialData.products.find((prod) => prod.slug === slug);
 
   if (!product) {
@@ -36,7 +34,7 @@ export default function Product({ params }: Props) {
         {/* Selector de tallas */}
         <SizeSelector selectedSize={product.sizes[0]} avaliableSizes={product.sizes} />
         {/* Selector de cantidad */}
-        <QuantitySelector />
+        <QuantitySelector quantity={1} />
         {/* Boton de agregar al carrito */}
         <button className="btn-primary my-5">Agregar al carrito</button>
 
