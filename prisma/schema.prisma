@@ -37,6 +37,7 @@ model Category {
   Product Product[]
 }
 
+// TODO: product y category podrian ser muchos a muchos
 model Product {
   id String @id @default(uuid())
   title String
@@ -49,6 +50,7 @@ model Product {
   gender Gender
   status Boolean @default(true)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now()) // se agrego default para productos que no tienen updateAt y no de error
 
   // Relations
   category Category @relation(fields: [categoryId], references: [id])
