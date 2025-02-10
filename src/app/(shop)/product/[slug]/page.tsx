@@ -1,21 +1,48 @@
-import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector } from "@/components";
+// export const revalidate = 345600; // TODO Testear que funcione y se revalide cada 4 dias
+export const revalidate = 30; // TODO Testear que funcione y se revalide cada 4 dias
+
+import { getProductBySlug } from "@/actions";
+import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector, StockLabel } from "@/components";
 import { titleFont } from "@/config/fonts";
-import { initialData } from "@/seed/seed";
+import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 interface Props {
   params: Promise<{ slug: string }>;
+  // searchParams: Promise<{ page?: string }>;
+}
+
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  // read route params
+  const slug = (await params).slug;
+
+  // fetch data
+  const product = await getProductBySlug(slug);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    //TODO configurar las demas Metadatas de las demas paguinas
+    title: product?.title ?? "Producto no encontrado",
+    description: product?.description ?? "",
+    openGraph: {
+      title: product?.title ?? "Producto no encontrado",
+      description: product?.description ?? "",
+      images: [`/products/${product?.images[0]}`, ...previousImages],
+    },
+  };
 }
 
 export default async function Product({ params }: Props) {
   // Todo params deberia ser asincrono
   const { slug } = await params;
-  const product = initialData.products.find((prod) => prod.slug === slug);
+  const product = await getProductBySlug(slug);
+  console.log("🚀 ~ Product ~ product:", product);
 
   if (!product) {
     notFound();
   }
 
-  console.log("🚀 ~ Product ~ params:", slug);
   return (
     <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Mobile Slideshow */}
@@ -29,6 +56,9 @@ export default async function Product({ params }: Props) {
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
+        {/* Opciones de stock //! TEST*/}
+        <StockLabel slug={product.slug} />
+        {/* Opciones de stock //! TEST*/}
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>{product.title}</h1>
         <p className="text-lg mb-5">${product.price}</p>
         {/* Selector de tallas */}
