@@ -1,11 +1,11 @@
-// export const revalidate = 345600; // TODO Testear que funcione y se revalide cada 4 dias
-export const revalidate = 30; // TODO Testear que funcione y se revalide cada 4 dias
+export const revalidate = 345600; // TODO Testear que funcione y se revalide cada 4 dias
 
 import { getProductBySlug } from "@/actions";
 import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector, StockLabel } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
+import { AddToCart } from "./ui/AddToCart";
 interface Props {
   params: Promise<{ slug: string }>;
   // searchParams: Promise<{ page?: string }>;
@@ -61,12 +61,8 @@ export default async function Product({ params }: Props) {
         {/* Opciones de stock //! TEST*/}
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>{product.title}</h1>
         <p className="text-lg mb-5">${product.price}</p>
-        {/* Selector de tallas */}
-        <SizeSelector selectedSize={product.sizes[0]} avaliableSizes={product.sizes} />
-        {/* Selector de cantidad */}
-        <QuantitySelector quantity={1} />
-        {/* Boton de agregar al carrito */}
-        <button className="btn-primary my-5">Agregar al carrito</button>
+        {/* Componente seleccionar tallas, cantidad */}
+        <AddToCart product={product} />
 
         {/* Descripcion */}
         <h3 className="font-bold text-sm">Descripcion</h3>
