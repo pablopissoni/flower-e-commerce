@@ -1,6 +1,7 @@
 "use client";
 import { QuantitySelector, SizeSelector } from "@/components";
-import { Product, Size } from "@/interfaces";
+import type { CartProduct, Product, Size } from "@/interfaces";
+import { useCartStore } from "@/store";
 import { useState } from "react";
 
 interface Props {
@@ -8,21 +9,44 @@ interface Props {
 }
 
 export const AddToCart = ({ product }: Props) => {
-  const [size, setSize] = useState<Size | undefined>();
+  const addProductToCart = useCartStore((state) => state.addProductToCart); // Store de carrito
+  const [selectedSize, SetSelectedSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
-  const [posted, setPosted] = useState(false);
+  const [isPosted, setIsPosted] = useState(false);
 
   const addtoCart = () => {
-    setPosted(true);
-    console.log("agregar al carrito: ", { size, quantity });
+    setIsPosted(true);
+    if (!selectedSize) return;
+
+    const cartProduct: CartProduct = {
+      id: product.id,
+      slug: product.slug,
+      title: product.title,
+      price: product.price,
+      quantity: quantity,
+      size: selectedSize,
+      image: product.images[0],
+    };
+
+    addProductToCart(cartProduct);
+    // Reseteo los valores
+    setIsPosted(false);
+    setQuantity(1);
+    SetSelectedSize(undefined);
+
+    console.log("agregar al carrito: ", cartProduct);
   };
 
   return (
     <>
       {/* Alerta si no hay talla */}
-      {!size && posted && <span className="text-red-500 fade-in">* Selecciona una talla</span>}
+      {!selectedSize && isPosted && <span className="text-red-500 fade-in">* Selecciona una talla</span>}
       {/* Selector de tallas */}
-      <SizeSelector selectedSize={size} avaliableSizes={product.sizes} onChangeSize={(size) => setSize(size)} />
+      <SizeSelector
+        selectedSize={selectedSize}
+        avaliableSizes={product.sizes}
+        onChangeSize={(selectedSize) => SetSelectedSize(selectedSize)}
+      />
       {/* Selector de cantidad */}
       <QuantitySelector quantity={quantity} onChangeQuantity={(quantity) => setQuantity(quantity)} />
       {/* Boton de agregar al carrito */}

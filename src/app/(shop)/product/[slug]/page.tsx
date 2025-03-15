@@ -1,7 +1,7 @@
 export const revalidate = 345600; // TODO Testear que funcione y se revalide cada 4 dias
 
 import { getProductBySlug } from "@/actions";
-import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector, StockLabel } from "@/components";
+import { ProductMobileSlideshow, ProductSlideshow, StockLabel } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
