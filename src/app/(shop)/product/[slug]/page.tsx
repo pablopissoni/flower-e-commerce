@@ -34,7 +34,6 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 }
 
 export default async function Product({ params }: Props) {
-  // Todo params deberia ser asincrono
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   console.log("🚀 ~ Product ~ product:", product);

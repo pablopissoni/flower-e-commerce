@@ -4,8 +4,12 @@ import { devtools, persist } from "zustand/middleware";
 
 interface State {
   cart: CartProduct[];
-  addProductToCart: (product: CartProduct) => void;
+
+  // Metodos
   getTotalItems: () => number;
+  addProductToCart: (product: CartProduct) => void;
+  updateProductQuantity: (product: CartProduct, updateQuantity: number) => void;
+  removeProductFromCart: (product: CartProduct) => void;
 }
 
 export const useCartStore = create<State>()(
@@ -40,7 +44,26 @@ export const useCartStore = create<State>()(
           });
           set({ cart: updateCartProducts });
         },
+
+        updateProductQuantity: (product: CartProduct, updateQuantity: number) => {
+          const { cart } = get();
+          const updateCartProduct = cart.map((item) => {
+            if (item.id === product.id && item.size === product.size) {
+              return { ...item, quantity: updateQuantity };
+            }
+            return item;
+          });
+
+          set({ cart: updateCartProduct });
+        },
+
+        removeProductFromCart: (product: CartProduct) => {
+          const { cart } = get();
+          const updateListProductsCart = cart.filter((item) => !(item.id === product.id && item.size === product.size));
+          set({ cart: updateListProductsCart });
+        },
       }),
+
       {
         name: "shopping-cart",
       }
