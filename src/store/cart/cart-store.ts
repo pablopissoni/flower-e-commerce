@@ -1,6 +1,7 @@
 import { CartProduct } from "@/interfaces";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { TAX } from "@/utils";
 
 interface State {
   cart: CartProduct[];
@@ -10,6 +11,7 @@ interface State {
   addProductToCart: (product: CartProduct) => void;
   updateProductQuantity: (product: CartProduct, updateQuantity: number) => void;
   removeProductFromCart: (product: CartProduct) => void;
+  getSummaryInformation: () => { subTotal: number; tax: number; total: number; itemInCart: number };
 }
 
 export const useCartStore = create<State>()(
@@ -61,6 +63,22 @@ export const useCartStore = create<State>()(
           const { cart } = get();
           const updateListProductsCart = cart.filter((item) => !(item.id === product.id && item.size === product.size));
           set({ cart: updateListProductsCart });
+        },
+
+        getSummaryInformation: () => {
+          const { cart } = get();
+          const subTotal = cart.reduce((subTotal, product) => product.quantity * product.price + subTotal, 0);
+          const tax = subTotal * TAX;
+          const total = subTotal + tax;
+
+          const itemInCart = cart.reduce((total, item) => total + item.quantity, 0);
+
+          return {
+            subTotal: Number(subTotal.toFixed(2)),
+            tax: Number(tax.toFixed(2)),
+            total: Number(total.toFixed(2)),
+            itemInCart: itemInCart,
+          };
         },
       }),
 
