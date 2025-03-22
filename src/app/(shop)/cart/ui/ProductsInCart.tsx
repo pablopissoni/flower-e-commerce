@@ -1,13 +1,10 @@
 "use client";
-import { CartProduct } from "@/interfaces";
 import Image from "next/image";
 import { QuantitySelector } from "@/components";
 import { useCartStore } from "@/store";
 import Link from "next/link";
 
-interface Props {}
-
-export const ProductsInCart = ({}: Props) => {
+export const ProductsInCart = () => {
   // si hubiese problemas de hidratacion se puede usar un loader
   const productsInCart = useCartStore((state) => state.cart);
   const updateQuantity = useCartStore((state) => state.updateProductQuantity);
